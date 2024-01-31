@@ -1,13 +1,16 @@
 "use client"; // This is a client component
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Style from '../style/components/Countdown.module.css';
+import { ChallengesContext } from '../contexts/ChallengesContext';
 
 let countdownTimeout: NodeJS.Timeout;
 
 
 export function Countdown() {
 
-  const [time, setTime] = useState(25 * 60);
+  const {startNewChallenge} = useContext(ChallengesContext)
+
+  const [time, setTime] = useState(0.1 * 60);
   const [active, setActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
   
@@ -26,6 +29,7 @@ export function Countdown() {
     setActive(false)
     setTime(25 * 60);
   }
+
   useEffect(() => {
     if(active && time > 0){
       countdownTimeout = setTimeout(() => {
@@ -34,6 +38,7 @@ export function Countdown() {
     } else if (active && time === 0){
       setHasFinished(true);
       setActive(false)
+      startNewChallenge();
     }
   }, [active, time])
 
